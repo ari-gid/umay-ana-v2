@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String              @id @default(cuid())
+  email     String              @unique
+  passwordHash String
+  name      String?
+  city      String?
+  createdAt DateTime            @default(now())
+  sessions  Session[]
+  pregnancy PregnancyProfile?
+  posts     ForumPost[]
+  comments  ForumComment[]
+  favorites Favorite[]
+}
+
+model Session {
+  token     String   @id
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PregnancyProfile {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  lmpDate            DateTime?
+  dueDate            DateTime?
+  gestationWeeks     Int?
+  gestationDays      Int?
+  trimester          Int      @default(1)
+  updatedAt          DateTime @updatedAt
+  privacyHideOnForum Boolean  @default(false)
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Article {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  title         String
+  excerpt       String
+  content       String
+  trimesterTags Json
+  topicTags     Json
+  readingTime   Int
+  createdAt     DateTime @default(now())
+}
+
+model ForumPost {
+  id           String         @id @default(cuid())
+  authorId     String
+  title        String
+  content      String
+  trimesterTag String?
+  topicTags    Json
+  upvotes      Int            @default(0)
+  createdAt    DateTime       @default(now())
+  author       User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments     ForumComment[]
+}
+
+model ForumComment {
+  id        String   @id @default(cuid())
+  postId    String
+  authorId  String
+  content   String
+  createdAt DateTime @default(now())
+  post      ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Doctor {
+  id             String   @id @default(cuid())
+  name           String
+  specialization String
+  city           String
+  rating         Float?
+  priceFrom      Int?
+  about          String
+  contacts       String?
+  createdAt      DateTime @default(now())
+}
+
+model Favorite {
+  id        String    @id @default(cuid())
+  userId    String
+  itemType  ItemType
+  itemId    String
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemType, itemId])
+}
+
+model DoctorRequest {
+  id        String   @id @default(cuid())
+  userId    String?
+  doctorId  String?
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+enum ItemType {
+  ARTICLE
+  POST
+}
