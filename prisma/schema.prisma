@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String           @id @default(cuid())
+  email            String           @unique
+  password         String
+  name             String
+  createdAt        DateTime         @default(now())
+  pregnancyProfile PregnancyProfile?
+  favorites        Favorite[]
+  forumPosts       ForumPost[]
+  forumComments    ForumComment[]
+  upvotes          ForumUpvote[]
+}
+
+model PregnancyProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  lmpDate     DateTime?
+  dueDate     DateTime?
+  currentWeek Int?
+  trimester   Int?
+  hideOnForum Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Article {
+  id          String     @id @default(cuid())
+  title       String
+  content     String
+  summary     String
+  trimester   Int?
+  topic       String
+  readingTime Int
+  imageUrl    String?
+  author      String
+  createdAt   DateTime   @default(now())
+  favorites   Favorite[]
+}
+
+model ForumPost {
+  id        String         @id @default(cuid())
+  title     String
+  content   String
+  tags      String
+  authorId  String
+  author    User           @relation(fields: [authorId], references: [id])
+  comments  ForumComment[]
+  upvotes   ForumUpvote[]
+  createdAt DateTime       @default(now())
+  favorites Favorite[]
+}
+
+model ForumComment {
+  id        String    @id @default(cuid())
+  content   String
+  postId    String
+  post      ForumPost @relation(fields: [postId], references: [id])
+  authorId  String
+  author    User      @relation(fields: [authorId], references: [id])
+  createdAt DateTime  @default(now())
+}
+
+model ForumUpvote {
+  id     String    @id @default(cuid())
+  postId String
+  post   ForumPost @relation(fields: [postId], references: [id])
+  userId String
+  user   User      @relation(fields: [userId], references: [id])
+
+  @@unique([postId, userId])
+}
+
+model Doctor {
+  id             String  @id @default(cuid())
+  name           String
+  specialization String
+  city           String
+  rating         Float
+  imageUrl       String?
+  bio            String
+  phone          String?
+  hospital       String?
+}
+
+model Favorite {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  articleId String?
+  article   Article?   @relation(fields: [articleId], references: [id])
+  postId    String?
+  post      ForumPost? @relation(fields: [postId], references: [id])
+  createdAt DateTime   @default(now())
+}

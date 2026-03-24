@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --pink-primary: #FF5FA2;
+  --pink-light: #FFE6F0;
+  --pink-medium: #FFB3D1;
+}
+
+body {
+  background-color: #FFE6F0;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[#FF5FA2] text-white font-semibold py-3 px-6 rounded-full hover:bg-[#E0457F] transition-colors duration-200 shadow-md;
+  }
+  .btn-secondary {
+    @apply bg-white text-[#FF5FA2] font-semibold py-3 px-6 rounded-full border-2 border-[#FF5FA2] hover:bg-[#FFE6F0] transition-colors duration-200;
+  }
+  .card {
+    @apply bg-white rounded-2xl shadow-sm p-6 border border-pink-medium/20;
+  }
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-pink-medium/40 focus:outline-none focus:ring-2 focus:ring-[#FF5FA2]/40 bg-white;
+  }
+}
