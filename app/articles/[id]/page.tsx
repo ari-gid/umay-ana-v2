@@ -313,8 +313,20 @@ export default async function ArticleDetailPage({
         </div>
       </div>
 
+      <style>{`
+        @media (max-width: 768px) {
+          .article-detail-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .article-sidebar {
+            position: static !important;
+          }
+        }
+      `}</style>
+
       <div style={{ maxWidth: 1080, margin: '0 auto', padding: '36px 24px' }}>
         <div
+          className="article-detail-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 300px',
@@ -435,7 +447,7 @@ export default async function ArticleDetailPage({
           </article>
 
           {/* Sidebar */}
-          <aside style={{ position: 'sticky', top: 24 }}>
+          <aside className="article-sidebar" style={{ position: 'sticky', top: 24 }}>
             <div
               style={{
                 backgroundColor: '#fff',

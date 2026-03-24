@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model ForumPost {
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String
+  author    String
+  category  String
+  tags      String
+  likes     Int       @default(0)
+  createdAt DateTime  @default(now())
+  comments  Comment[]
+}
+
+model Comment {
+  id        Int       @id @default(autoincrement())
+  content   String
+  author    String
+  postId    Int
+  post      ForumPost @relation(fields: [postId], references: [id])
+  createdAt DateTime  @default(now())
+}
+
+model Article {
+  id          Int      @id @default(autoincrement())
+  title       String
+  content     String
+  excerpt     String
+  category    String
+  author      String
+  readingTime Int
+  createdAt   DateTime @default(now())
+}
