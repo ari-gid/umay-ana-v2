@@ -5,11 +5,12 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const post = await prisma.forumPost.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         author: { select: { id: true, name: true } },
         comments: {

@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getSession()
@@ -19,10 +19,11 @@ export async function POST(
       return NextResponse.json({ error: 'Content is required' }, { status: 400 })
     }
 
+    const { id } = await params
     const comment = await prisma.forumComment.create({
       data: {
         content,
-        postId: params.id,
+        postId: id,
         authorId: user.id,
       },
       include: { author: { select: { id: true, name: true } } },

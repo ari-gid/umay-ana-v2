@@ -6,9 +6,10 @@ import UpvoteButton from '@/components/forum/UpvoteButton'
 
 export const dynamic = 'force-dynamic'
 
-export default async function ForumPostPage({ params }: { params: { id: string } }) {
+export default async function ForumPostPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const post = await prisma.forumPost.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       author: { select: { id: true, name: true } },
       comments: { include: { author: { select: { id: true, name: true } } }, orderBy: { createdAt: 'asc' } },

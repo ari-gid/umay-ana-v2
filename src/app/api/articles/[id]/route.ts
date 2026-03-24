@@ -5,11 +5,12 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const article = await prisma.article.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
     if (!article) {
       return NextResponse.json({ error: 'Article not found' }, { status: 404 })

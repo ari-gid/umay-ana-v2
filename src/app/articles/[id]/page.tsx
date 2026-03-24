@@ -13,8 +13,9 @@ const topicEmojis: Record<string, string> = {
   baby: '👶',
 }
 
-export default async function ArticleDetailPage({ params }: { params: { id: string } }) {
-  const article = await prisma.article.findUnique({ where: { id: params.id } })
+export default async function ArticleDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const article = await prisma.article.findUnique({ where: { id } })
   if (!article) notFound()
 
   const trimesterLabel = article.trimester

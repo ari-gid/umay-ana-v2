@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 
 export async function POST(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getSession()
@@ -14,19 +14,20 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
     const existing = await prisma.forumUpvote.findUnique({
-      where: { postId_userId: { postId: params.id, userId: user.id } },
+      where: { postId_userId: { postId: id, userId: user.id } },
     })
 
     if (existing) {
       await prisma.forumUpvote.delete({ where: { id: existing.id } })
-      const count = await prisma.forumUpvote.count({ where: { postId: params.id } })
+      const count = await prisma.forumUpvote.count({ where: { postId: id } })
       return NextResponse.json({ upvoted: false, count })
     } else {
       await prisma.forumUpvote.create({
-        data: { postId: params.id, userId: user.id },
+        data: { postId: id, userId: user.id },
       })
-      const count = await prisma.forumUpvote.count({ where: { postId: params.id } })
+      const count = await prisma.forumUpvote.count({ where: { postId: id } })
       return NextResponse.json({ upvoted: true, count })
     }
   } catch (error) {
