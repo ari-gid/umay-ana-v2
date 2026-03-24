@@ -1,6 +1,11 @@
 import { PrismaClient } from '@prisma/client'
+import { PrismaLibSql } from '@prisma/adapter-libsql'
+import path from 'path'
 
-const prisma = new PrismaClient()
+const dbPath = `file:${path.join(process.cwd(), 'prisma', 'dev.db')}`
+const adapter = new PrismaLibSql({ url: dbPath })
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const prisma = new PrismaClient({ adapter } as any)
 
 async function main() {
   await prisma.forumPost.createMany({

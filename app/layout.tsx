@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Link from 'next/link'
+import Navbar from './components/Navbar'
 
 export const metadata: Metadata = {
   title: 'BloomCare - Your Pregnancy Journey, Beautifully Supported',
@@ -23,83 +24,7 @@ export default function RootLayout({
           color: '#1f2937',
         }}
       >
-        <nav
-          style={{
-            background: 'linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%)',
-            borderBottom: '1px solid #f9a8d4',
-            position: 'sticky',
-            top: 0,
-            zIndex: 50,
-          }}
-        >
-          <div
-            style={{
-              maxWidth: '1200px',
-              margin: '0 auto',
-              padding: '0 1.5rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              height: '64px',
-            }}
-          >
-            <Link href="/" style={{ textDecoration: 'none' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontSize: '1.5rem' }}>🌸</span>
-                <span
-                  style={{
-                    fontSize: '1.25rem',
-                    fontWeight: 700,
-                    color: '#be185d',
-                    letterSpacing: '-0.025em',
-                  }}
-                >
-                  BloomCare
-                </span>
-              </div>
-            </Link>
-
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.25rem',
-              }}
-            >
-              {[
-                { href: '/', label: 'Home' },
-                { href: '/forum', label: 'Forum' },
-                { href: '/articles', label: 'Articles' },
-                { href: '/doctors', label: 'Doctors' },
-                { href: '/chat', label: 'AI Chat' },
-              ].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  style={{
-                    padding: '0.5rem 0.875rem',
-                    borderRadius: '9999px',
-                    fontSize: '0.875rem',
-                    fontWeight: 500,
-                    color: '#9d174d',
-                    textDecoration: 'none',
-                    transition: 'background-color 0.2s',
-                  }}
-                  onMouseOver={(e) => {
-                    ;(e.currentTarget as HTMLAnchorElement).style.backgroundColor =
-                      'rgba(249, 168, 212, 0.4)'
-                  }}
-                  onMouseOut={(e) => {
-                    ;(e.currentTarget as HTMLAnchorElement).style.backgroundColor =
-                      'transparent'
-                  }}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </nav>
+        <Navbar />
 
         <main style={{ minHeight: 'calc(100vh - 64px - 200px)' }}>
           {children}
@@ -159,7 +84,7 @@ export default function RootLayout({
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 {['Help Center', 'Privacy Policy', 'Terms of Service'].map((item) => (
-                  <span key={item} style={{ fontSize: '0.875rem', color: '#9d174d', cursor: 'pointer' }}>
+                  <span key={item} style={{ fontSize: '0.875rem', color: '#9d174d' }}>
                     {item}
                   </span>
                 ))}
@@ -185,7 +110,7 @@ export default function RootLayout({
               color: '#9d174d',
             }}
           >
-            © {new Date().getFullYear()} BloomCare. All rights reserved. Made with 💗 for expectant mothers everywhere.
+            © 2025 BloomCare. All rights reserved. Made with 💗 for expectant mothers everywhere.
           </div>
         </footer>
       </body>
